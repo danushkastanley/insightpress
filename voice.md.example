@@ -1,0 +1,26 @@
+# Voice Guidance for InsightPress
+
+This file helps InsightPress match your writing tone (optional).
+
+Add 5-10 example posts you've written in your preferred style.
+The system will analyze sentence length and tone heuristically.
+
+## Example Posts
+
+Kubernetes 1.30 changes how autoscaling works under load. Worth understanding the trade-offs before adopting.
+
+New Rust RFC addresses memory safety in async contexts. This matters for anyone building concurrent systems at scale.
+
+Security researchers found privilege escalation in common container runtime. Patch urgently if you're running this in production.
+
+AWS announced managed Prometheus at half the cost. Could reduce operational overhead for observability teams.
+
+OpenAI released structured output mode for GPT-4. This is the kind of guardrail teams need to stop unvetted LLM usage creeping into prod.
+
+## Guidelines
+
+- Keep sentences short and direct (aim for 15-25 words)
+- Lead with what changed, follow with why it matters
+- Avoid emojis, clickbait, and rhetorical questions
+- Focus on practitioner implications (cost, risk, workflow)
+- Use concrete terms over abstract hype

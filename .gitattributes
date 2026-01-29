@@ -1,0 +1,27 @@
+# Basic .gitattributes for better GitHub stats and diffs
+
+# Python
+*.py linguist-language=Python
+
+# Documentation
+*.md linguist-documentation
+
+# Config files
+*.yaml linguist-language=YAML
+*.yml linguist-language=YAML
+*.toml linguist-language=TOML
+
+# Line endings
+* text=auto
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary

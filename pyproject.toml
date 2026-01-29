@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_backend"
+
+[project]
+name = "insightpress"
+version = "0.1.0"
+description = "Generate draft X posts from trusted tech/AI sources"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Danushka Stanley", email = "danushkastanley@gmail.com"}
+]
+maintainers = [
+    {name = "Danushka Stanley", email = "danushkastanley@gmail.com"}
+]
+keywords = ["twitter", "x", "social-media", "drafts", "tech-news", "ai", "automation", "content-generation", "devrel"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Communications :: Social Media",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = [
+    "python-dotenv>=1.0.0",
+    "feedparser>=6.0.0",
+    "requests>=2.31.0",
+    "pyyaml>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+insightpress = "insightpress.__main__:main"
+
+[tool.setuptools]
+packages = ["insightpress", "insightpress.collectors", "insightpress.processing", "insightpress.drafting", "insightpress.io", "insightpress.llm"]

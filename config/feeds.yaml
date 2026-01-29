@@ -1,0 +1,61 @@
+# RSS Feeds Configuration for InsightPress
+#
+# Each feed should have:
+#   - name: Display name for the source
+#   - url: RSS feed URL
+#   - weight: Optional weight factor (default: 0.8)
+
+feeds:
+  # Cloud Providers
+  - name: "AWS News"
+    url: "https://aws.amazon.com/blogs/aws/feed/"
+    weight: 0.9
+
+  - name: "Google Cloud Blog"
+    url: "https://cloud.google.com/blog/rss"
+    weight: 0.9
+
+  - name: "Azure Blog"
+    url: "https://azure.microsoft.com/en-us/blog/feed/"
+    weight: 0.9
+
+  # AI/ML Companies
+  - name: "OpenAI Blog"
+    url: "https://openai.com/blog/rss.xml"
+    weight: 1.0
+
+  - name: "Anthropic News"
+    url: "https://www.anthropic.com/news/rss.xml"
+    weight: 1.0
+
+  # Container/DevOps
+  - name: "Kubernetes Blog"
+    url: "https://kubernetes.io/feed.xml"
+    weight: 0.9
+
+  - name: "Docker Blog"
+    url: "https://www.docker.com/blog/feed/"
+    weight: 0.8
+
+  - name: "HashiCorp Blog"
+    url: "https://www.hashicorp.com/blog/feed.xml"
+    weight: 0.8
+
+  # Security
+  - name: "Cloudflare Blog"
+    url: "https://blog.cloudflare.com/rss/"
+    weight: 0.9
+
+  - name: "GitHub Blog"
+    url: "https://github.blog/feed/"
+    weight: 0.8
+
+  # Tech News
+  - name: "The New Stack"
+    url: "https://thenewstack.io/feed/"
+    weight: 0.7
+
+  # Add more feeds as needed
+  # - name: "Your Custom Feed"
+  #   url: "https://example.com/feed.xml"
+  #   weight: 0.8

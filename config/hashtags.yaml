@@ -1,0 +1,79 @@
+# Hashtag Mappings for InsightPress
+#
+# STRICT RULES:
+# - All hashtags must be lowercase
+# - Represent domains, NOT brands
+# - Only include if directly relevant
+#
+# Maps keywords (lowercase) to hashtag strings (lowercase, without # prefix)
+
+mappings:
+  # AI/ML - Domain focused
+  "ai": "ai"
+  "artificial intelligence": "ai"
+  "machine learning": "ml"
+  "ml": "ml"
+  "deep learning": "deeplearning"
+  "llm": "llm"
+  "large language model": "llm"
+  "neural": "neuralnetworks"
+  "transformer": "transformers"
+
+  # Cloud & Infrastructure - Domain focused
+  "kubernetes": "kubernetes"
+  "k8s": "kubernetes"
+  "docker": "docker"
+  "container": "containers"
+  "aws": "aws"
+  "azure": "azure"
+  "gcp": "gcp"
+  "google cloud": "gcp"
+  "cloud": "cloud"
+  "serverless": "serverless"
+
+  # DevOps & Tools - Domain focused
+  "devops": "devops"
+  "mlops": "mlops"
+  "cicd": "cicd"
+  "ci/cd": "cicd"
+  "terraform": "terraform"
+  "ansible": "ansible"
+
+  # Security - Domain focused
+  "security": "security"
+  "cybersecurity": "security"
+  "infosec": "security"
+  "vulnerability": "security"
+  "exploit": "security"
+  "encryption": "encryption"
+  "authentication": "authentication"
+
+  # Observability - Domain focused
+  "observability": "observability"
+  "monitoring": "monitoring"
+  "logging": "logging"
+  "tracing": "tracing"
+  "metrics": "metrics"
+
+  # Programming Languages - Domain focused
+  "rust": "rust"
+  "python": "python"
+  "golang": "golang"
+  "go": "golang"
+  "javascript": "javascript"
+  "typescript": "typescript"
+
+  # Frameworks - Domain focused (selective)
+  "pytorch": "pytorch"
+  "tensorflow": "tensorflow"
+
+  # General Tech - Domain focused
+  "api": "api"
+  "database": "database"
+  "microservices": "microservices"
+  "opensource": "opensource"
+  "open source": "opensource"
+  "open-source": "opensource"
+
+# NOTE: Brand names removed (OpenAI, Anthropic, ChatGPT, Claude, etc.)
+# These are not domain tags and should not be used
