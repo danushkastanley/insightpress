@@ -15,6 +15,7 @@ class LLMResponse:
     hashtags: list[str]
     final_post: str
     char_count: int
+    expected_url: Optional[str] = None  # URL that should be in the final_post
 
     def is_valid(self, max_chars: int, max_hashtags: int) -> tuple[bool, Optional[str]]:
         """
@@ -39,6 +40,13 @@ class LLMResponse:
         for tag in self.hashtags:
             if tag != tag.lower():
                 return False, f"Hashtag not lowercase: {tag}"
+
+        # Check if expected URL is present (critical - no placeholder URLs)
+        if self.expected_url:
+            if self.expected_url not in self.final_post:
+                return False, f"Missing expected URL {self.expected_url} - found placeholder instead"
+            if "example.com" in self.final_post:
+                return False, "Using placeholder example.com URL instead of actual URL"
 
         return True, None
 

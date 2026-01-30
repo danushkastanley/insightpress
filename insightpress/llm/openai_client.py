@@ -43,7 +43,7 @@ class OpenAIClient(BaseLLMClient):
         if not response_text:
             return None
 
-        llm_response = self._parse_response(response_text)
+        llm_response = self._parse_response(response_text, expected_url=url)
         if llm_response:
             return llm_response
 
@@ -51,13 +51,13 @@ class OpenAIClient(BaseLLMClient):
         logger.debug("First attempt failed validation, retrying with correction")
         for attempt in range(self.max_retries):
             correction_prompt = build_correction_prompt(
-                error="Invalid JSON or validation failed. Ensure final_post ≤260 chars with concrete implication."
+                error=f"Invalid JSON or validation failed. CRITICAL: Use the actual URL {url} not example.com. Ensure final_post ≤260 chars with concrete implication."
             )
             response_text = self._call_api(correction_prompt)
             if not response_text:
                 continue
 
-            llm_response = self._parse_response(response_text)
+            llm_response = self._parse_response(response_text, expected_url=url)
             if llm_response:
                 return llm_response
 
@@ -104,7 +104,7 @@ class OpenAIClient(BaseLLMClient):
             logger.error(f"Unexpected OpenAI response format: {e}")
             return None
 
-    def _parse_response(self, response_text: str) -> Optional[LLMResponse]:
+    def _parse_response(self, response_text: str, expected_url: str) -> Optional[LLMResponse]:
         """Parse and validate LLM response."""
         try:
             # Remove markdown code blocks if present
@@ -123,9 +123,10 @@ class OpenAIClient(BaseLLMClient):
                 hashtags=data.get("hashtags", []),
                 final_post=data.get("final_post", ""),
                 char_count=len(data.get("final_post", "")),
+                expected_url=expected_url,
             )
 
-            # Validate (260 char limit, 3 hashtag max)
+            # Validate (260 char limit, 3 hashtag max, correct URL)
             is_valid, error = llm_response.is_valid(max_chars=260, max_hashtags=3)
             if not is_valid:
                 logger.debug(f"Response validation failed: {error}")

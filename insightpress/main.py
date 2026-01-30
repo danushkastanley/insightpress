@@ -8,7 +8,7 @@ from typing import Optional
 from .collectors import HackerNewsCollector, RSSCollector
 from .config import Config
 from .drafting import generate_drafts
-from .io import CacheManager, write_report
+from .io import CacheManager, UsedItemsTracker, write_report
 from .llm import get_llm_client
 from .models import DraftReport
 from .processing import deduplicate_items, rank_items
@@ -62,8 +62,9 @@ def run(
     # Ensure directories exist
     Config.ensure_dirs()
 
-    # Initialize cache manager
+    # Initialize cache manager and used items tracker
     cache = CacheManager()
+    used_tracker = UsedItemsTracker(Config.CACHE_DIR, retention_days=7)
 
     # Step 1: Load or fetch items
     items = []
@@ -92,11 +93,15 @@ def run(
     unique_items, skipped = deduplicate_items(items)
     logger.info(f"After deduplication: {len(unique_items)} unique items")
 
-    # Step 3: Rank items
-    ranked_items = rank_items(unique_items, topics=Config.TOPICS)
+    # Step 3: Filter out previously used items
+    fresh_items = [item for item in unique_items if not used_tracker.is_used(item.url)]
+    logger.info(f"Filtered out {len(unique_items) - len(fresh_items)} previously used items")
+
+    # Step 4: Rank items
+    ranked_items = rank_items(fresh_items, topics=Config.TOPICS)
     logger.info(f"Ranked {len(ranked_items)} items")
 
-    # Step 4: Initialize LLM client if configured
+    # Step 5: Initialize LLM client if configured
     llm_client = None
     if Config.LLM_PROVIDER != "none":
         # Get API key based on provider
@@ -117,13 +122,18 @@ def run(
             max_retries=Config.LLM_MAX_RETRIES,
         )
 
-    # Step 5: Generate drafts
+    # Step 6: Generate drafts
     # Generate more than needed to account for filtering
     candidate_items = ranked_items[:Config.DRAFTS_COUNT * 3]
     drafts = generate_drafts(candidate_items, count=Config.DRAFTS_COUNT, llm_client=llm_client)
     logger.info(f"Generated {len(drafts)} drafts")
 
-    # Step 6: Prepare other candidates with topic confidence filtering
+    # Mark draft items as used
+    used_urls = [draft.source_item.url for draft in drafts]
+    used_tracker.mark_multiple_used(used_urls)
+    used_tracker.save()
+
+    # Step 7: Prepare other candidates with topic confidence filtering
     remaining_items = ranked_items[Config.DRAFTS_COUNT * 3:]
     other_candidates = [
         item for item in remaining_items[:Config.MAX_ITEMS]
@@ -131,7 +141,7 @@ def run(
     ]
     logger.info(f"Filtered to {len(other_candidates)} high-confidence candidates")
 
-    # Step 7: Build report
+    # Step 8: Build report
     now = datetime.now()
     report = DraftReport(
         date=now.strftime("%Y-%m-%d"),
@@ -143,7 +153,7 @@ def run(
         total_duplicates_removed=len(skipped),
     )
 
-    # Step 8: Write report
+    # Step 9: Write report
     output_file = write_report(report, output_path)
     logger.info(f"Report written to {output_file}")
 
