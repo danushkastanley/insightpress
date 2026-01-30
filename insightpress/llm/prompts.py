@@ -42,7 +42,11 @@ Return ONLY valid JSON (no markdown, no explanations):
   "final_post": "complete post text including URL and hashtags"
 }
 
-The final_post field MUST be the complete formatted post ready to publish."""
+CRITICAL: The final_post field MUST:
+- Be the complete formatted post ready to publish
+- Include the EXACT URL provided in the item metadata (not a placeholder)
+- Format: hook + implication + optional action + newline + URL + newline + hashtags
+- Use ONLY the URL provided in the metadata - never use example.com or placeholder URLs"""
 
 USER_PROMPT_TEMPLATE = """Generate a draft X post for this item:
 
@@ -57,11 +61,14 @@ ITEM METADATA:
 ALLOWED HASHTAGS (choose 0-3):
 {allowed_hashtags}
 
-CONSTRAINTS:
-- Final post ≤260 chars (HARD LIMIT)
-- Must include concrete implication (risk/cost/workflow)
-- Hashtags must be lowercase and from allowed list only
-- URL must be on its own line
+CRITICAL INSTRUCTIONS:
+1. Base your draft on the ACTUAL article title and summary provided above
+2. The final_post MUST include the EXACT URL: {url}
+3. Do NOT use placeholder URLs like example.com or generic content
+4. Write specifically about what THIS article discusses, not generic topics
+5. Final post ≤260 chars (HARD LIMIT)
+6. Must include concrete implication specific to this article
+7. Hashtags must be lowercase and from allowed list only
 
 Return JSON only (no markdown formatting)."""
 

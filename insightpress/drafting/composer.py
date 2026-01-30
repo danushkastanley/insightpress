@@ -331,13 +331,30 @@ def _create_hook(title: str) -> str:
         if title.startswith(prefix):
             title = title[len(prefix):]
 
-    # Shorten if too long
-    if len(title) > 80:
+    # Shorten if too long (be aggressive to leave room for implication + URL + hashtags)
+    max_hook_length = 50
+    if len(title) > max_hook_length:
         # Try to cut at sentence boundary
-        if "." in title[:80]:
-            title = title[:title.find(".", 0, 80) + 1]
+        if "." in title[:max_hook_length]:
+            title = title[:title.find(".", 0, max_hook_length) + 1]
         else:
-            title = title[:77] + "..."
+            # Cut at last space to avoid mid-word truncation
+            if " " in title[:max_hook_length]:
+                last_space = title[:max_hook_length].rfind(" ")
+                truncated = title[:last_space].strip()
+
+                # Check if we're ending on incomplete phrases like "a", "the", "an", "in", "of", "to"
+                incomplete_words = ["a", "an", "the", "in", "of", "to", "for", "at", "by", "on"]
+                words = truncated.split()
+                if words and words[-1].lower() in incomplete_words:
+                    # Remove the incomplete word and try again
+                    truncated = " ".join(words[:-1])
+
+                # Strip trailing punctuation (except periods which indicate sentence end)
+                title = truncated.rstrip(",;:")
+            else:
+                # No spaces found, just cut and clean
+                title = title[:max_hook_length].rstrip(",;:")
 
     return title
 
